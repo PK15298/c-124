@@ -1,5 +1,4 @@
 from flask import Flask,jsonify,request
-
 app = Flask(__name__)
 allTask=[
     {
@@ -16,14 +15,7 @@ allTask=[
         'done': False
     }
 ]
-
-@app.route('/display')
-def displayTask():
-    return jsonify({
-        'data': allTask
-    })
-
-@app.route('/input',methods=['POST'])
+@app.route("/input",methods=['POST'])
 
 def inputTask():
     if not request.json:
@@ -35,7 +27,7 @@ def inputTask():
     task = {
         'id':allTask[-1]['id']+1,
         'title':request.json['title'],
-        'description':request.json['description', ''],
+        'description':request.json.get('description', ""),
         'done': False  
     }
     allTask.append(task)
@@ -43,9 +35,13 @@ def inputTask():
     return jsonify({
             'status':'success',
             'message':'task added successfully'  
-            
-                  })
+    })
+@app.route("/display")
+def displayTask():
+    return jsonify({
+        'data': allTask
+    })                  
 
-if(__name__=='__main__'):
+if(__name__=="__main__"):
     app.run(debug=True)
 
